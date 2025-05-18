@@ -1,0 +1,54 @@
+package com.kiko.interwayapp.service.impl;
+
+import com.kiko.interwayapp.exceptions.ProductNotFoundException;
+import com.kiko.interwayapp.mapper.ProductMapper;
+import com.kiko.interwayapp.models.Product;
+import com.kiko.interwayapp.models.dto.ProductRequest;
+import com.kiko.interwayapp.models.dto.ProductResponse;
+import com.kiko.interwayapp.repository.ProductRepository;
+import com.kiko.interwayapp.service.ProductService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class ProductServiceImpl implements ProductService {
+
+    private final ProductRepository repository;
+    private final ProductMapper mapper;
+
+    public ProductServiceImpl(ProductRepository repository, ProductMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public List<ProductResponse> findAll() {
+        return mapper.toProductResponse(repository.findAll());
+    }
+
+    @Override
+    public ProductResponse createProduct(ProductRequest productRequest) {
+        return mapper.toProductResponse(repository.save(mapper.toProduct(productRequest)));
+    }
+
+    @Override
+    public ProductResponse findById(UUID id) {
+        Product product=repository.findById(id).orElseThrow(()->new ProductNotFoundException(id));
+        return mapper.toProductResponse(product);
+    }
+
+    @Override
+    public ProductResponse updateProduct(ProductRequest productRequest, UUID id) {
+        Product product=repository.findById(id).orElseThrow((()->new ProductNotFoundException(id)));
+        mapper.updateProduct(product,productRequest);
+        return mapper.toProductResponse(repository.save(product));
+    }
+
+    @Override
+    public void deleteProduct(UUID id) {
+        Product product=repository.findById(id).orElseThrow(()->new ProductNotFoundException(id));
+        repository.delete(product);
+    }
+}
