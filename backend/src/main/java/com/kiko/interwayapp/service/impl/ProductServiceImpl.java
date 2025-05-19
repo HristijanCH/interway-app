@@ -89,4 +89,12 @@ public class ProductServiceImpl implements ProductService {
 
         repository.save(product);
     }
+
+    @Override
+    public List<ProductResponse> searchByNameAndCategory(String name, String category) {
+        String nameFilter = "%" + name + "%";
+        String categoryFilter = "%" + category + "%";
+        List<Product> products=repository.findProductByNameLikeIgnoreCaseAndAndCategoryLikeIgnoreCase(nameFilter,categoryFilter);
+        return mapper.toProductResponse(products);
+    }
 }

@@ -19,4 +19,5 @@ public interface ProductService {
 
     PagedResponse<ProductResponse> getPaginatedProducts(Integer page, Integer size);
     void updateProductImage(UUID id, MultipartFile imageFile);
+    List<ProductResponse> searchByNameAndCategory(String name, String category);
 }

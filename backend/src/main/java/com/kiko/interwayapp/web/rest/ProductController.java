@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -61,6 +62,14 @@ public class ProductController {
     ) {
         service.updateProductImage(id, imageFile);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>> searchProducts(@RequestParam(required = false, defaultValue = "") String name,
+                                                                @RequestParam(required = false, defaultValue = "") String category){
+
+        List<ProductResponse> productResponseList=service.searchByNameAndCategory(name,category);
+        return ResponseEntity.ok(productResponseList);
     }
 
     @DeleteMapping("/{id}")
