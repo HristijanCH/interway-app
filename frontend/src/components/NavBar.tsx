@@ -12,12 +12,17 @@ export default function Navbar() {
         hover:after:w-full after:transition-all after:duration-300 after:absolute after:-bottom-1 after:left-0 
         after:h-[2px] after:bg-white after:w-0 ${isActive ? 'after:w-full' : ''}`;
 
+    const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
+        `block text-base font-medium px-4 py-2 rounded-md transition
+    ${isActive ? 'bg-white text-blue-700' : 'text-white hover:bg-white hover:text-blue-700'}`;
+
+
     return (
-        <nav className="bg-gradient-to-r from-blue-400 to-blue-700 shadow-md">
+        <nav className="bg-gradient-to-r from-blue-400 to-blue-700 shadow-md w-full">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <div className="flex-shrink-0 text-2xl font-extrabold text-white tracking-tight shadow-sm">
+                    <div className="text-2xl font-extrabold text-white tracking-tight shadow-sm">
                         <Link to="/" className="hover:text-gray-100">
                             Product Inventory
                         </Link>
@@ -28,7 +33,7 @@ export default function Navbar() {
                         <NavLink to="/" end className={navLinkClass}>
                             Home
                         </NavLink>
-                        <NavLink to="/products" className={navLinkClass}>
+                        <NavLink to="/products" end className={navLinkClass}>
                             Products
                         </NavLink>
                         <NavLink to="/products/new" className={navLinkClass}>
@@ -47,14 +52,14 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div className="md:hidden px-4 pb-4 space-y-2">
-                    <NavLink to="/" end onClick={toggleMenu} className={navLinkClass}>
+                <div className="md:hidden bg-blue-600 w-full px-2 pb-4 space-y-2">
+                    <NavLink to="/" end onClick={toggleMenu} className={mobileLinkClass}>
                         Home
                     </NavLink>
-                    <NavLink to="/products" onClick={toggleMenu} className={navLinkClass}>
+                    <NavLink to="/products" end onClick={toggleMenu} className={mobileLinkClass}>
                         Products
                     </NavLink>
-                    <NavLink to="/products/new" onClick={toggleMenu} className={navLinkClass}>
+                    <NavLink to="/products/new" onClick={toggleMenu} className={mobileLinkClass}>
                         Add Product
                     </NavLink>
                 </div>

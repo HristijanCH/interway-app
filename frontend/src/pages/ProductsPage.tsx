@@ -8,12 +8,9 @@ import {useDeleteProduct, useProducts} from '../hooks/product.ts';
 import { useState, } from 'react';
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import type {Product} from "../types/DataTypes.ts";
 
-interface Product {
-    id: string;
-    name: string;
-    price: number;
-}
+
 
 export default function ProductsPage() {
     const [page, setPage] = useState(1);
@@ -44,7 +41,7 @@ export default function ProductsPage() {
                             Details
                         </button>
                         <button
-                            onClick={() => handleEdit(product.id)}
+                            onClick={() => handleEdit(product)}
                             className="text-yellow-600 hover:underline text-sm"
                         >
                             Edit
@@ -87,8 +84,8 @@ export default function ProductsPage() {
          navigate(`/products/${id}`);
     };
 
-    const handleEdit = (id: string) => {
-         navigate(`/products/edit/${id}`);
+    const handleEdit = (product: Product) => {
+        navigate(`/products/edit/${product.id}`, { state: { product } });
     };
 
     const handleDelete = (id: string) => {

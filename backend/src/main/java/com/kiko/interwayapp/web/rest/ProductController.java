@@ -40,7 +40,7 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest product){
         ProductResponse createdProduct = service.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(createdProduct);
