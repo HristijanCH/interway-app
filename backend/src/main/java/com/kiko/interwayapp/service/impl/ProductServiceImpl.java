@@ -3,10 +3,14 @@ package com.kiko.interwayapp.service.impl;
 import com.kiko.interwayapp.exceptions.ProductNotFoundException;
 import com.kiko.interwayapp.mapper.ProductMapper;
 import com.kiko.interwayapp.models.Product;
+import com.kiko.interwayapp.models.dto.PagedResponse;
 import com.kiko.interwayapp.models.dto.ProductRequest;
 import com.kiko.interwayapp.models.dto.ProductResponse;
 import com.kiko.interwayapp.repository.ProductRepository;
 import com.kiko.interwayapp.service.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,5 +54,19 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(UUID id) {
         Product product=repository.findById(id).orElseThrow(()->new ProductNotFoundException(id));
         repository.delete(product);
+    }
+
+    @Override
+    public PagedResponse<ProductResponse> getPaginatedProducts(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductResponse> productPage = repository.findAll(pageable).map(mapper::toProductResponse);
+        return new PagedResponse<>(
+                productPage.getContent(),
+                productPage.getNumber(),
+                productPage.getSize(),
+                productPage.getTotalElements(),
+                productPage.getTotalPages(),
+                productPage.isLast()
+        );
     }
 }
