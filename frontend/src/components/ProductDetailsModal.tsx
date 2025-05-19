@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
-import { useProductById } from "../hooks/product.ts"; // adjust path as needed
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "./../lib/axios.ts";
+import {useProductById, useUploadProductImageMutation} from "../hooks/product.ts"; // adjust path as needed
+import { useQueryClient } from "@tanstack/react-query";
 import {toast} from "react-toastify";
 
 interface Product {
@@ -41,38 +40,28 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
         }
     }, [productData]);
 
-    const uploadMutation = useMutation({
-        mutationFn: async (file: File) => {
-            const formData = new FormData();
-            formData.append("image", file);
+    const uploadMutation = useUploadProductImageMutation(product?.id);
 
-            await axios.put(`/api/products/${product?.id}/image`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
+    const handleUpload = () => {
+        if (selectedFile) {
+            uploadMutation.mutate(selectedFile, {
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ["product", product?.id] });
+                    toast.success("Image uploaded successfully");
+                    setSelectedFile(null);
+                },
+                onError: (err) => {
+                    console.error("Image upload failed", err);
+                    toast.error("Image upload failed. Please try again.");
                 },
             });
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["product", product?.id] });
-            toast.success("Image uploaded successfully");
-            setSelectedFile(null);
-        },
-        onError: (err) => {
-            console.error("Image upload failed", err);
-            toast.error("Image upload failed. Please try again.");
-        },
-    });
+        }
+    };
 
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setSelectedFile(e.target.files[0]);
-        }
-    };
-
-    const handleUpload = () => {
-        if (selectedFile) {
-            uploadMutation.mutate(selectedFile);
         }
     };
 

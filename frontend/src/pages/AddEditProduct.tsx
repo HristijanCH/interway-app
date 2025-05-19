@@ -59,7 +59,6 @@ export default function AddEditProduct() {
             </h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-6">
-                {/* Product Name */}
                 <div className="flex flex-col">
                     <label htmlFor="name" className="text-sm font-medium text-gray-700 mb-1">Product Name</label>
                     <input
@@ -70,7 +69,6 @@ export default function AddEditProduct() {
                     {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name.message}</span>}
                 </div>
 
-                {/* Description */}
                 <div className="flex flex-col">
                     <label htmlFor="description" className="text-sm font-medium text-gray-700 mb-1">Description</label>
                     <textarea
@@ -81,7 +79,6 @@ export default function AddEditProduct() {
                     />
                 </div>
 
-                {/* Price */}
                 <div className="flex flex-col">
                     <label htmlFor="price" className="text-sm font-medium text-gray-700 mb-1">Price ($)</label>
                     <input
@@ -95,7 +92,6 @@ export default function AddEditProduct() {
                     {errors.price && <span className="text-red-500 text-sm mt-1">{errors.price.message}</span>}
                 </div>
 
-                {/* Quantity */}
                 <div className="flex flex-col">
                     <label htmlFor="quantityInStock" className="text-sm font-medium text-gray-700 mb-1">Quantity in Stock</label>
                     <input
@@ -108,7 +104,6 @@ export default function AddEditProduct() {
                     {errors.quantityInStock && <span className="text-red-500 text-sm mt-1">{errors.quantityInStock.message}</span>}
                 </div>
 
-                {/* Category */}
                 <div className="flex flex-col">
                     <label htmlFor="category" className="text-sm font-medium text-gray-700 mb-1">Category</label>
                     <input
@@ -118,7 +113,6 @@ export default function AddEditProduct() {
                     />
                 </div>
 
-                {/* Submit Button */}
                 <div className="flex justify-end">
                     <button
                         type="submit"

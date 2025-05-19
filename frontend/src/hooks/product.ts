@@ -53,13 +53,33 @@ export const useDeleteProduct = () => {
     });
 };
 
-// export const useFilterProducts = (query: string) => {
-//     return useQuery({
-//         queryKey: ['products', 'filter', query],
-//         queryFn: async () =>{
-//             const response = await axios.get(`/api/products/filter?name=${query}`);
-//             return response.data;
-//         },
-//         enabled: !!query
-//     });
-// };
+export const useUploadProductImageMutation = (productId: string | undefined) => {
+    return useMutation({
+        mutationFn: async (file: File) => {
+            if (!productId) throw new Error("Product ID is required");
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            await axios.put(`/api/products/${productId}/image`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+        },
+    });
+};
+
+export const useSearchProducts = ({name,category}:{name:string | undefined,category:string | undefined}) => {
+    return useQuery({
+        queryKey: ['products', 'search', name,category],
+        queryFn: async () =>{
+            const params = new URLSearchParams();
+            if (name) params.append("name", name);
+            if (category) params.append("category", category);
+            const response = await axios.get(`/api/products/search?${params.toString()}`);
+            return response.data;
+        },
+        enabled: false
+    });
+};
