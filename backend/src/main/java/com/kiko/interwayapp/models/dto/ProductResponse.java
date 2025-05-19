@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Setter
@@ -19,4 +20,6 @@ public class ProductResponse{
     private Integer quantityInStock;
     private String category;
     private byte[] image;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }
