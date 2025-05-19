@@ -9,6 +9,7 @@ import { useState, } from 'react';
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import type {Product} from "../types/DataTypes.ts";
+import ProductDetailsModal from "../components/ProductDetailsModal.tsx";
 
 
 
@@ -16,7 +17,9 @@ export default function ProductsPage() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(5); // ✅ make pageSize reactive
     const { data, isLoading } = useProducts(page - 1, pageSize);
-    const { mutate: deleteProduct, isPending } = useDeleteProduct();
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+    const { mutate: deleteProduct } = useDeleteProduct();
 
     const navigate = useNavigate();
 
@@ -35,7 +38,7 @@ export default function ProductsPage() {
                 return (
                     <div className="flex gap-2">
                         <button
-                            onClick={() => handleDetails(product.id)}
+                            onClick={() => handleDetails(product)}
                             className="text-blue-600 hover:underline text-sm"
                         >
                             Details
@@ -80,8 +83,9 @@ export default function ProductsPage() {
         },
     });
 
-    const handleDetails = (id: string) => {
-         navigate(`/products/${id}`);
+    const handleDetails = (product: Product) => {
+        setSelectedProduct(product);
+        setDetailsModalOpen(true);
     };
 
     const handleEdit = (product: Product) => {
@@ -189,6 +193,11 @@ export default function ProductsPage() {
                     </div>
                 </div>
             </div>
+            <ProductDetailsModal
+                product={selectedProduct}
+                isOpen={detailsModalOpen}
+                onClose={() => setDetailsModalOpen(false)}
+            />
         </div>
     );
 }
