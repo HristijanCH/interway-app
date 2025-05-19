@@ -3,6 +3,7 @@ package com.kiko.interwayapp.service;
 import com.kiko.interwayapp.models.dto.PagedResponse;
 import com.kiko.interwayapp.models.dto.ProductRequest;
 import com.kiko.interwayapp.models.dto.ProductResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -17,4 +18,5 @@ public interface ProductService {
     void deleteProduct(UUID id);
 
     PagedResponse<ProductResponse> getPaginatedProducts(Integer page, Integer size);
+    void updateProductImage(UUID id, MultipartFile imageFile);
 }

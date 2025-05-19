@@ -28,15 +28,17 @@ public class Product {
 
     @NotNull
     @Min(0)
-    @Column(name = "price",nullable = false)
+    @Column(name = "price", nullable = false)
     private Double price;
 
     @NotNull
     @Min(0)
-    @Column(name = "quantity_in_stock",nullable = false)
+    @Column(name = "quantity_in_stock", nullable = false)
     private Integer quantityInStock;
 
     @Column(name = "category")
     private String category;
 
+    @Column(name = "image", columnDefinition = "BYTEA")
+    private byte[] image;
 }

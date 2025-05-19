@@ -6,8 +6,10 @@ import com.kiko.interwayapp.service.ProductService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -50,6 +52,15 @@ public class ProductController {
     public ResponseEntity<ProductResponse> updateProduct(@RequestBody @Valid ProductRequest productRequest,@PathVariable UUID id){
         ProductResponse updatedProduct = service.updateProduct(productRequest,id);
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    @PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateProductImage(
+            @PathVariable UUID id,
+            @RequestPart("image") MultipartFile imageFile
+    ) {
+        service.updateProductImage(id, imageFile);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

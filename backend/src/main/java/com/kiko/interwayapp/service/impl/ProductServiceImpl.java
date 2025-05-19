@@ -8,11 +8,14 @@ import com.kiko.interwayapp.models.dto.ProductRequest;
 import com.kiko.interwayapp.models.dto.ProductResponse;
 import com.kiko.interwayapp.repository.ProductRepository;
 import com.kiko.interwayapp.service.ProductService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +43,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse findById(UUID id) {
         Product product=repository.findById(id).orElseThrow(()->new ProductNotFoundException(id));
-        return mapper.toProductResponse(product);
+        ProductResponse response=mapper.toProductResponse(product);
+        response.setImage(product.getImage());
+        return response;
     }
 
     @Override
@@ -68,5 +73,20 @@ public class ProductServiceImpl implements ProductService {
                 productPage.getTotalPages(),
                 productPage.isLast()
         );
+    }
+    @Transactional
+    public void updateProductImage(UUID id, MultipartFile imageFile) {
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                product.setImage(imageFile.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to read image file", e);
+            }
+        }
+
+        repository.save(product);
     }
 }

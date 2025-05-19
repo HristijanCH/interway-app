@@ -18,4 +18,5 @@ public class ProductResponse{
     private Double price;
     private Integer quantityInStock;
     private String category;
+    private byte[] image;
 }
