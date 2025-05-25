@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import {ProductService} from '../../products/services/product.service';
 
 @Component({
   selector: 'app-products-page',
@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './products-page.component.html',
 })
 export class ProductsPageComponent {
-  private http = inject(HttpClient);
+  private productService = inject(ProductService);
   private router = inject(Router);
 
   products: any[] = [];
@@ -27,11 +27,7 @@ export class ProductsPageComponent {
   }
 
   fetchProducts() {
-    const params = {
-      page: this.page - 1,
-      size: this.pageSize,
-    };
-    this.http.get<any>('api/products', { params }).subscribe((data) => {
+    this.productService.getProducts(this.page - 1, this.pageSize).subscribe((data) => {
       this.products = data.content;
       this.totalPages = data.totalPages;
     });
@@ -40,11 +36,7 @@ export class ProductsPageComponent {
   searchProducts() {
     if (!this.nameSearch && !this.categorySearch) return;
     this.isSearching = true;
-    const params = {
-      name: this.nameSearch,
-      category: this.categorySearch,
-    };
-    this.http.get<any>('api/products/search', { params }).subscribe((data) => {
+    this.productService.searchProducts(this.nameSearch, this.categorySearch).subscribe((data) => {
       this.products = data;
     });
   }
@@ -66,7 +58,7 @@ export class ProductsPageComponent {
 
   deleteProduct(id: string) {
     if (confirm('Are you sure you want to delete this product?')) {
-      this.http.delete(`api/products/${id}`).subscribe(() => {
+      this.productService.deleteProduct(id).subscribe(() => {
         this.fetchProducts();
       });
     }
