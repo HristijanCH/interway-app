@@ -1,0 +1,52 @@
+<nav class="bg-gradient-to-r from-blue-400 to-blue-700 shadow-md w-full">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="text-2xl font-extrabold text-white tracking-tight shadow-sm">
+        <a routerLink="/" class="hover:text-gray-100">
+          Product Inventory
+        </a>
+      </div>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex gap-10 items-center">
+        <a
+          routerLink="/"
+          [routerLinkActive]="'active'"
+          [ngClass]="getNavLinkClass('/')"
+        >
+          Home
+        </a>
+        <a
+          routerLink="/products"
+          [routerLinkActive]="'active'"
+          [ngClass]="getNavLinkClass('/products')"
+        >
+          Products
+        </a>
+        <a
+          routerLink="/products/new"
+          [routerLinkActive]="'active'"
+          [ngClass]="getNavLinkClass('/products/new')"
+        >
+          Add Product
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button (click)="toggleMenu()" class="text-white focus:outline-none">
+          <span *ngIf="!isOpen">&#9776;</span>
+          <span *ngIf="isOpen">&#10005;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="isOpen" class="md:hidden bg-blue-600 w-full px-2 pb-4 space-y-2">
+    <a routerLink="/" (click)="closeMenu()" class="mobile-link">Home</a>
+    <a routerLink="/products" (click)="closeMenu()" class="mobile-link">Products</a>
+    <a routerLink="/products/new" (click)="closeMenu()" class="mobile-link">Add Product</a>
+  </div>
+</nav>

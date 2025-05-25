@@ -1,0 +1,41 @@
+<div class="p-6 bg-white rounded-xl shadow-xl w-full max-w-lg border">
+  <h2 class="text-xl font-semibold mb-4">Product Details</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="flex flex-col items-center">
+      <ng-container *ngIf="imageUrl; else noImage">
+        <img [src]="imageUrl" alt="Product Image" class="w-full h-48 object-contain border rounded" />
+      </ng-container>
+      <ng-template #noImage>
+        <div class="w-full h-48 bg-gray-100 flex items-center justify-center border rounded text-gray-400">
+          No image
+        </div>
+      </ng-template>
+
+      <label class="mt-3 inline-block px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded cursor-pointer hover:bg-gray-200">
+        {{ selectedFile?.name || 'Choose Image' }}
+        <input type="file" (change)="onFileChange($event)" accept="image/*" class="hidden" />
+      </label>
+
+      <button
+        (click)="uploadImage()"
+        [disabled]="!selectedFile || isUploading"
+        class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+      >
+        {{ isUploading ? 'Uploading...' : 'Upload/Change Image' }}
+      </button>
+    </div>
+
+    <div class="text-sm text-gray-700 space-y-2">
+      <div><strong>Name:</strong> {{ product?.name }}</div>
+      <div><strong>Description:</strong> {{ product?.description || '—' }}</div>
+      <div><strong>Price:</strong> {{ product?.price | currency }}</div>
+      <div><strong>Quantity:</strong> {{ product?.quantityInStock }}</div>
+      <div><strong>Category:</strong> {{ product?.category || '—' }}</div>
+    </div>
+  </div>
+
+  <div class="mt-6 text-right">
+    <button (click)="close()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Close</button>
+  </div>
+</div>
