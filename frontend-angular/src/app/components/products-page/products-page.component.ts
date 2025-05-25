@@ -2,7 +2,11 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import {ProductService} from '../../products/services/product.service';
+import { Dialog } from '@angular/cdk/dialog';
+
+import { ProductService } from '../../products/services/product.service';
+import {ProductDetailsDialogComponent} from '../product-details-dialog/product-details-dialog.component';
+import {Product} from '../../products/types/product.types';
 
 @Component({
   selector: 'app-products-page',
@@ -13,6 +17,7 @@ import {ProductService} from '../../products/services/product.service';
 export class ProductsPageComponent {
   private productService = inject(ProductService);
   private router = inject(Router);
+  private dialog = inject(Dialog);
 
   products: any[] = [];
   page = 1;
@@ -48,8 +53,11 @@ export class ProductsPageComponent {
     this.fetchProducts();
   }
 
-  viewDetails(product: any) {
-    // Implement modal logic here
+  viewDetails(product: Product) {
+    console.log(product)
+    this.dialog.open(ProductDetailsDialogComponent, {
+      data: { productId: product.id },
+    });
   }
 
   editProduct(product: any) {
